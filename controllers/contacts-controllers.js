@@ -8,7 +8,9 @@ const optionsUpdate = {
 };
 
 const getContactsAll = async (req, res, next) => {
-  const result = await Contact.find();
+  const { _id: id } = req.user;
+  const result = await Contact.find({ owner: id }).populate("owner", "email");
+  console.log(result);
 
   res.json(result);
 };

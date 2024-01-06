@@ -8,10 +8,11 @@ import {
 } from "../../models/Contact.js";
 import isValidId from "../../middlewares/isValidId.js";
 import isEmplyBody from "../../middlewares/isEmplyBody.js";
+import isToken from "../../middlewares/isToken.js";
 
 const router = express.Router();
 
-router.get("/", controllersContacts.getContactsAll);
+router.get("/", isToken, controllersContacts.getContactsAll);
 
 router.get("/:contactId", isValidId, controllersContacts.getbyId);
 

@@ -25,13 +25,21 @@ const userSchema = new Schema(
 );
 
 export const registerUserSchema = Joi.object({
-  password: Joi.string().min(6).required(),
-  email: Joi.string().pattern(patternEmail).required(),
+  password: Joi.string().min(6).required().messages({
+    "any.required": `missed required password field`,
+  }),
+  email: Joi.string().pattern(patternEmail).required().messages({
+    "any.required": `missed required email field`,
+  }),
 });
 
 export const loginUserSchema = Joi.object({
-  password: Joi.string().min(6).required(),
-  email: Joi.string().pattern(patternEmail).required(),
+  password: Joi.string().min(6).required().messages({
+    "any.required": `missed required password field`,
+  }),
+  email: Joi.string().pattern(patternEmail).required().messages({
+    "any.required": `missed required email field`,
+  }),
 });
 
 const User = model("user", userSchema);

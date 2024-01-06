@@ -8,21 +8,21 @@ import isToken from "../../middlewares/isToken.js";
 const authRouter = express.Router();
 
 authRouter.post(
-  "/users/register",
+  "/register",
   isEmplyBody,
   validateBody(registerUserSchema),
   authController.creatUser
 );
 
 authRouter.post(
-  "/users/login",
+  "/login",
   isEmplyBody,
   validateBody(loginUserSchema),
   authController.loginUser
 );
 
-authRouter.post("/users/logout", isToken, authController.logoutUser);
+authRouter.post("/logout", isToken, authController.logoutUser);
 
-authRouter.get("/users/current", isToken, authController.creatUser);
+authRouter.get("/current", isToken, authController.currentUser);
 
 export default authRouter;

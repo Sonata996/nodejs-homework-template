@@ -16,24 +16,27 @@ const creatUser = async (req, res, next) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
   const result = await User.create({ ...req.body, password: hashPassword });
-
-  res.json({
-    email: result.email,
-    password: result.password,
+  console.log(result);
+  res.status(201).json({
+    user: {
+      email: result.email,
+      subscription: result.subscription,
+    },
   });
 };
 
 const loginUser = async (req, res, next) => {
   const { email, password } = req.body;
   const findUser = await User.findOne({ email });
-  const subscription = findUser.subscription;
+
   if (!findUser) {
-    return next(HttpError(401, "Email or password is wrong1"));
+    return next(HttpError(401, "Email or password is wrong"));
   }
 
+  const subscription = findUser.subscription;
   const comparePassword = await bcrypt.compare(password, findUser.password);
   if (!comparePassword) {
-    return next(HttpError(401, "Email or password is wrong2"));
+    return next(HttpError(401, "Email or password is wrong"));
   }
 
   const { _id: id } = findUser;
@@ -46,8 +49,10 @@ const loginUser = async (req, res, next) => {
 
   res.json({
     token,
-    email,
-    subscription,
+    user: {
+      email,
+      subscription,
+    },
   });
 };
 
@@ -59,14 +64,12 @@ const logoutUser = async (req, res, next) => {
 
   await User.findByIdAndUpdate(_id, { token: "" });
 
-  res.json({
-    message: "Signout success",
-  });
+  res.status(204).json();
 };
 
 const currentUser = async (req, res) => {
   const { email, subscription } = req.user;
-
+  console.log(email, subscription);
   res.json({
     email,
     subscription,
