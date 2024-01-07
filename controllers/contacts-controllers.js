@@ -10,14 +10,14 @@ const optionsUpdate = {
 const getContactsAll = async (req, res, next) => {
   const { _id: id } = req.user;
   const result = await Contact.find({ owner: id }).populate("owner", "email");
-  console.log(result);
 
   res.json(result);
 };
 
 const getbyId = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await Contact.findById(contactId);
+  const { _id: ownerId } = req.user;
+  const result = await Contact.findById({ _id: contactId, owner: ownerId });
   if (!result) {
     return next(HttpError(404, "Not found"));
   }
@@ -25,13 +25,19 @@ const getbyId = async (req, res, next) => {
 };
 
 const add = async (req, res) => {
-  const result = await Contact.create(req.body);
+  const { _id: id } = req.user;
+  const result = await Contact.create({ ...req.body, owner: id });
   res.status(201).json(result);
 };
 
 const deletbyId = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await Contact.findByIdAndDelete(contactId);
+  const { _id: ownerId } = req.user;
+
+  const result = await Contact.findByIdAndDelete({
+    _id: contactId,
+    owner: ownerId,
+  });
   if (!result) {
     return next(HttpError(404, "Not found"));
   }
@@ -40,7 +46,12 @@ const deletbyId = async (req, res, next) => {
 
 const updateContactbyId = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await Contact.findByIdAndUpdate(contactId, req.body);
+  const { _id: ownerId } = req.user;
+
+  const result = await Contact.findByIdAndUpdate(
+    { _id: contactId, owner: ownerId },
+    req.body
+  );
 
   if (!result) {
     return next(HttpError(404, "Not found"));
@@ -50,7 +61,12 @@ const updateContactbyId = async (req, res, next) => {
 
 const updateStatusContact = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await Contact.findByIdAndUpdate(contactId, req.body);
+  const { _id: ownerId } = req.user;
+
+  const result = await Contact.findByIdAndUpdate(
+    { _id: contactId, owner: ownerId },
+    req.body
+  );
   if (!result) {
     return next(HttpError(404, `${contactId} not found`));
   }

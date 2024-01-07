@@ -14,19 +14,21 @@ const router = express.Router();
 
 router.get("/", isToken, controllersContacts.getContactsAll);
 
-router.get("/:contactId", isValidId, controllersContacts.getbyId);
+router.get("/:contactId", isToken, isValidId, controllersContacts.getbyId);
 
 router.post(
   "/",
+  isToken,
   isEmplyBody,
   validateBody(contactAddSchema),
   controllersContacts.add
 );
 
-router.delete("/:contactId", isValidId, controllersContacts.deletbyId);
+router.delete("/:contactId", isToken, isValidId, controllersContacts.deletbyId);
 
 router.put(
   "/:contactId",
+  isToken,
   isValidId,
   isEmplyBody,
   validateBody(contactUpdateSchema),
@@ -35,6 +37,7 @@ router.put(
 
 router.patch(
   "/:contactId/favorite",
+  isToken,
   isValidId,
   isEmplyBody,
   validateBody(contactsUpdateStatusSchema),

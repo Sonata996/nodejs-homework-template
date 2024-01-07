@@ -16,7 +16,7 @@ const creatUser = async (req, res, next) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
   const result = await User.create({ ...req.body, password: hashPassword });
-  console.log(result);
+
   res.status(201).json({
     user: {
       email: result.email,

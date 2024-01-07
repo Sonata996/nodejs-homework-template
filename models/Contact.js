@@ -2,6 +2,8 @@ import { Schema, model } from "mongoose";
 import Joi from "joi";
 import { handleSaveError, addOptionsUpdateContact } from "./hooks.js";
 
+const patternEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
 const contactSchema = new Schema(
   {
     name: {
@@ -18,6 +20,11 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
   { versionKey: false }
 );
@@ -30,7 +37,7 @@ export const contactAddSchema = Joi.object({
   name: Joi.string().required().messages({
     "any.required": `missing required name field`,
   }),
-  email: Joi.string().email().required().messages({
+  email: Joi.string().email().required().pattern(patternEmail).messages({
     "any.required": `missing required email field`,
   }),
   phone: Joi.string().required().messages({
