@@ -17,7 +17,7 @@ const getContactsAll = async (req, res, next) => {
 const getbyId = async (req, res, next) => {
   const { contactId } = req.params;
   const { _id: ownerId } = req.user;
-  const result = await Contact.findById({ _id: contactId, owner: ownerId });
+  const result = await Contact.findOne({ _id: contactId, owner: ownerId });
   if (!result) {
     return next(HttpError(404, "Not found"));
   }
