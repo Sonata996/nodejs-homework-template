@@ -34,7 +34,7 @@ const deletbyId = async (req, res, next) => {
   const { contactId } = req.params;
   const { _id: ownerId } = req.user;
 
-  const result = await Contact.findByIdAndDelete({
+  const result = await Contact.findOneAndDelete({
     _id: contactId,
     owner: ownerId,
   });
@@ -48,7 +48,7 @@ const updateContactbyId = async (req, res, next) => {
   const { contactId } = req.params;
   const { _id: ownerId } = req.user;
 
-  const result = await Contact.findByIdAndUpdate(
+  const result = await Contact.findOneAndUpdate(
     { _id: contactId, owner: ownerId },
     req.body
   );
@@ -63,7 +63,7 @@ const updateStatusContact = async (req, res, next) => {
   const { contactId } = req.params;
   const { _id: ownerId } = req.user;
 
-  const result = await Contact.findByIdAndUpdate(
+  const result = await Contact.findOneAndUpdate(
     { _id: contactId, owner: ownerId },
     req.body
   );
